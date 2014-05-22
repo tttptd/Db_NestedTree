@@ -111,25 +111,6 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Defined by Zend_Db_Table_Abstract.
      *
-     * @param array $options
-     * @return Zend_Db_Table_Abstract
-     */
-    public function setOptions(Array $options)
-    {
-        if(isset($options[self::LEFT_COL])) {
-            $this->_left = (string)$options[self::LEFT_COL];
-        }
-        if(isset($options[self::RIGHT_COL])) {
-            $this->_right = (string)$options[self::RIGHT_COL];
-        }
-
-        return parent::setOptions($options);
-    }
-
-
-    /**
-     * Defined by Zend_Db_Table_Abstract.
-     *
      * @return void
      */
     protected function _setupPrimaryKey()
@@ -409,6 +390,25 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         }
 
         return $select;
+    }
+
+
+    /**
+     * Defined by Zend_Db_Table_Abstract.
+     *
+     * @param array $options
+     * @return Zend_Db_Table_Abstract
+     */
+    public function setOptions(Array $options)
+    {
+        if(isset($options[self::LEFT_COL])) {
+            $this->_left = (string)$options[self::LEFT_COL];
+        }
+        if(isset($options[self::RIGHT_COL])) {
+            $this->_right = (string)$options[self::RIGHT_COL];
+        }
+
+        return parent::setOptions($options);
     }
 
 
