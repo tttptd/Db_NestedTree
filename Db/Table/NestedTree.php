@@ -183,6 +183,236 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
 
     /**
+     * Checks whether valid node position is supplied.
+     *
+     * @param string Position regarding on objective node.
+     * @return bool
+     */
+    private function _checkNodePosition($position)
+    {
+        if(!in_array($position, self::$_validPositions)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Generates left and right column value, based on id of a
+     * objective node.
+     *
+     * @param int|null Id of a objective node.
+     * @param string Position in tree.
+     * @param int|null Id of a node for which left and right column values are being generated (optional).
+     * @return array
+     */
+    protected function _getLftRgt($objectiveNodeId, $position, $id = null)
+    {
+        $lftRgt = array();
+
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
+
+        $left = null;
+        $right = null;
+
+        if($objectiveNodeId) { //User selected some objective node?
+            $objectiveNodeId = (int)$objectiveNodeId;
+            $result = $this->getNestedSetData($objectiveNodeId);
+            if($result) {
+                $left = (int)$result['left'];
+                $right = (int)$result['right'];
+            }
+        }
+
+        if($left !== null && $right !== null) { //Existing objective id?
+            switch ($position) {
+                case self::FIRST_CHILD :
+                    $lftRgt[$this->_left] = $left + 1;
+                    $lftRgt[$this->_right] = $left + 2;
+
+                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol > $left");
+                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol > $left");
+
+                    break;
+                case self::LAST_CHILD :
+                    $lftRgt[$this->_left] = $right;
+                    $lftRgt[$this->_right] = $right + 1;
+
+                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol >= $right");
+                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol > $right");
+
+                    break;
+                case self::NEXT_SIBLING :
+                    $lftRgt[$this->_left] = $right + 1;
+                    $lftRgt[$this->_right] = $right + 2;
+
+                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol > $right");
+                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol > $right");
+
+                    break;
+                case self::PREV_SIBLING :
+                    $lftRgt[$this->_left] = $left;
+                    $lftRgt[$this->_right] = $left + 1;
+
+                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol > $left");
+                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol >= $left");
+
+                    break;
+            }
+        }
+        else {
+            $sql = $this->select()->from($this->_name,array('max_rgt'=>new Zend_Db_Expr("MAX($rightCol)")));
+            if($id !== null) {
+               $id = (int)$id;
+               $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+               $sql->where("$primary != ?", $id, Zend_Db::INT_TYPE);
+            }
+            $result = $this->_db->fetchRow($sql);
+
+            if(!$result) { //No data? First node...
+                $lftRgt[$this->_left] = 1;
+            }
+            else {
+                $lftRgt[$this->_left] = (int)$result['max_rgt'] + 1;
+            }
+
+            $lftRgt[$this->_right] = $lftRgt[$this->_left] + 1;
+        }
+
+        return $lftRgt;
+    }
+
+
+    /**
+     * Reduces lft and rgt values of some nodes, on which some
+     * node that is changing position in tree, or being deleted,
+     * has effect.
+     *
+     * @param mixed Id of a node.
+     * @return void
+     */
+    protected function _reduceWidth($id)
+    {
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
+
+        $result = $this->getNestedSetData($id);
+
+        if($result) {
+            $left = (int)$result['left'];
+            $right = (int)$result['right'];
+            $width = (int)$result['width'];
+
+            if($width > 2) { //Some node that has children.
+                //Updating child nodes.
+                $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol - 1"), $this->_right=>new Zend_Db_Expr("$rightCol - 1")), "$leftCol BETWEEN $left AND $right");
+            }
+
+            //Updating parent nodes and nodes on higher levels.
+            $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol - 2")), "$leftCol > $left AND $rightCol > $right");
+            $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol - 2")), "$rightCol > $right");
+        }
+    }
+
+
+    /**
+     * Gets id of some node's current objective node.
+     *
+     * @param mixed Node id.
+     * @param string Position in tree.
+     * @return int|null
+     */
+    protected function _getCurrentObjectiveId($nodeId, $position)
+    {
+        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
+
+        $sql = $this->select()
+            ->from(
+                array('node' => $this->_name),
+                array($this->_primary[1])
+            )
+            ->join(array('current'=>$this->_name), '', array());
+
+        switch ($position) {
+            case self::FIRST_CHILD :
+                $sql->where("current.$leftCol BETWEEN node.$leftCol+1 AND node.$rightCol AND current.$leftCol - node.$leftCol = 1")
+                    ->order('node.' . $this->_left . ' DESC');
+
+                break;
+            case self::LAST_CHILD :
+                $sql->where("current.$leftCol BETWEEN node.$leftCol+1 AND node.$rightCol AND node.$rightCol - current.$rightCol = 1")
+                    ->order('node.' . $this->_left . ' DESC');
+
+                break;
+            case self::NEXT_SIBLING :
+                $sql->where("current.$leftCol - node.$rightCol = 1");
+
+                break;
+            case self::PREV_SIBLING :
+                $sql->where("node.$leftCol - current.$rightCol = 1");
+
+                break;
+        }
+
+        $sql->where("current.$primary = ?", $nodeId, Zend_Db::INT_TYPE);
+
+        $result = $this->_db->fetchRow($sql);
+        if($result) {
+            return (int)$result[$this->_primary[1]];
+        }
+        else {
+            return null;
+        }
+    }
+
+
+    /**
+     * Generates and returns SQL query that is used for fetchAll() and
+     * fetchRow() methods, in case $parentAlias param is supplied.
+     *
+     * @param string|array|Zend_Db_Table_Select|null $where       An SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param string|null                            $parentAlias Additional column, named after value of this argument, will be returned, containing id of a parent node will be included in result set.
+     * @param string|array|null                      $order       An SQL ORDER clause.
+     * @param int|null                               $count       OPTIONAL An SQL LIMIT count.
+     * @param int|null                               $offset      OPTIONAL An SQL LIMIT offset.
+     * @return Zend_Db_Table_Select
+     */
+    protected function _getSelectWithParent($where, $parentAlias, $order, $count = null, $offset = null)
+    {
+        $parentAlias = (string)$parentAlias;
+
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
+
+        $parentSelect = $this->select()
+            ->from($this->_name, array($this->_primary[1]))
+            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol . ' BETWEEN ' . $leftCol . '+1 AND ' . $rightCol)
+            ->order($this->_left . ' DESC')
+            ->limit(1);
+
+        $select = $this->select()->from(array(self::LEFT_TBL_ALIAS => $this->_name), array('*', $parentAlias => "($parentSelect)"));
+
+        if($where !== null) {
+            $this->_where($select, $where);
+        }
+
+        if($order !== null) {
+            $this->_order($select, $order);
+        }
+
+        if($count !== null || $offset !== null) {
+            $select->limit($count, $offset);
+        }
+
+        return $select;
+    }
+
+
+    /**
      * Retrieve the current node
      *
      * @param int|string $nodeId identifier of node to retrieve
@@ -454,15 +684,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
 
     /**
-     * Gets parentNode, including informations.
+     * Gets children nodes, including informations.
      *
      * @param int nodeId of a node.
      * @param bool $withCurrent return current nodeId too.
      * @param string order using order table key.
-     * @param string group using group table key.
      * @return array
      */
-    public function getChilds($withCurrent = null, $order = null)
+    public function getChildren($withCurrent = null, $order = null)
     {
         $withCurrent = (int) $withCurrent;
         $nodeId = $this->getNodeId();
@@ -494,10 +723,10 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
 
     /**
-     * Return all childs id of current node
+     * Return all children ids of current node (all level)
      * @return array
      */
-    public function getChildsId()
+    public function getChildrenId()
     {
         $nodeId = $this->getNodeId();
         $node = $this->getNode();
@@ -577,22 +806,6 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
 
     /**
-     * Checks whether valid node position is supplied.
-     *
-     * @param string Position regarding on objective node.
-     * @return bool
-     */
-    private function _checkNodePosition($position)
-    {
-        if(!in_array($position, self::$_validPositions)) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    /**
      * Deletes some node(s) and returns ids of deleted nodes.
      *
      * @param mixed Id of a node.
@@ -626,131 +839,12 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             //Deleting items.
             $retval = $this->delete("$leftCol BETWEEN $lft AND $rgt");
 
-            $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol - $width")), "$leftCol > $lft");
+            $this->update(array($this->_left => new Zend_Db_Expr("$leftCol - $width")), "$leftCol > $lft");
 
-            $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol - $width")), "$rightCol > $rgt");
+            $this->update(array($this->_right => new Zend_Db_Expr("$rightCol - $width")), "$rightCol > $rgt");
         }
 
         return $retval;
-    }
-
-
-    /**
-     * Generates left and right column value, based on id of a
-     * objective node.
-     *
-     * @param int|null Id of a objective node.
-     * @param string Position in tree.
-     * @param int|null Id of a node for which left and right column values are being generated (optional).
-     * @return array
-     */
-    protected function _getLftRgt($objectiveNodeId, $position, $id = null)
-    {
-        $lftRgt = array();
-
-        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
-
-        $left = null;
-        $right = null;
-
-        if($objectiveNodeId) { //User selected some objective node?
-            $objectiveNodeId = (int)$objectiveNodeId;
-            $result = $this->getNestedSetData($objectiveNodeId);
-            if($result) {
-                $left = (int)$result['left'];
-                $right = (int)$result['right'];
-            }
-        }
-
-        if($left !== null && $right !== null) { //Existing objective id?
-            switch ($position) {
-                case self::FIRST_CHILD :
-                    $lftRgt[$this->_left] = $left + 1;
-                    $lftRgt[$this->_right] = $left + 2;
-
-                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol > $left");
-                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol > $left");
-
-                    break;
-                case self::LAST_CHILD :
-                    $lftRgt[$this->_left] = $right;
-                    $lftRgt[$this->_right] = $right + 1;
-
-                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol >= $right");
-                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol > $right");
-
-                    break;
-                case self::NEXT_SIBLING :
-                    $lftRgt[$this->_left] = $right + 1;
-                    $lftRgt[$this->_right] = $right + 2;
-
-                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol > $right");
-                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol > $right");
-
-                    break;
-                case self::PREV_SIBLING :
-                    $lftRgt[$this->_left] = $left;
-                    $lftRgt[$this->_right] = $left + 1;
-
-                    $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol + 2")), "$rightCol > $left");
-                    $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol + 2")), "$leftCol >= $left");
-
-                    break;
-            }
-        }
-        else {
-            $sql = $this->select()->from($this->_name,array('max_rgt'=>new Zend_Db_Expr("MAX($rightCol)")));
-            if($id !== null) {
-               $id = (int)$id;
-               $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-               $sql->where("$primary != ?", $id, Zend_Db::INT_TYPE);
-            }
-            $result = $this->_db->fetchRow($sql);
-
-            if(!$result) { //No data? First node...
-                $lftRgt[$this->_left] = 1;
-            }
-            else {
-                $lftRgt[$this->_left] = (int)$result['max_rgt'] + 1;
-            }
-
-            $lftRgt[$this->_right] = $lftRgt[$this->_left] + 1;
-        }
-
-        return $lftRgt;
-    }
-
-
-    /**
-     * Reduces lft and rgt values of some nodes, on which some
-     * node that is changing position in tree, or being deleted,
-     * has effect.
-     *
-     * @param mixed Id of a node.
-     * @return void
-     */
-    protected function _reduceWidth($id)
-    {
-        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
-
-        $result = $this->getNestedSetData($id);
-
-        if($result) {
-            $left = (int)$result['left'];
-            $right = (int)$result['right'];
-            $width = (int)$result['width'];
-
-            if($width > 2) { //Some node that has childs.
-                //Updating child nodes.
-                $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol - 1"), $this->_right=>new Zend_Db_Expr("$rightCol - 1")), "$leftCol BETWEEN $left AND $right");
-            }
-
-            //Updating parent nodes and nodes on higher levels.
-            $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol - 2")), "$leftCol > $left AND $rightCol > $right");
-            $this->update(array($this->_right=>new Zend_Db_Expr("$rightCol - 2")), "$rightCol > $right");
-        }
     }
 
 
@@ -785,59 +879,6 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         if($result) {
             $this->_nestedDataCache[$id] = $result; //Storing result in cache.
             return $result;
-        }
-        else {
-            return null;
-        }
-    }
-
-
-    /**
-     * Gets id of some node's current objective node.
-     *
-     * @param mixed Node id.
-     * @param string Position in tree.
-     * @return int|null
-     */
-    protected function _getCurrentObjectiveId($nodeId, $position)
-    {
-        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
-
-        $sql = $this->select()
-            ->from(
-                array('node' => $this->_name),
-                array($this->_primary[1])
-            )
-            ->join(array('current'=>$this->_name), '', array());
-
-        switch ($position) {
-            case self::FIRST_CHILD :
-                $sql->where("current.$leftCol BETWEEN node.$leftCol+1 AND node.$rightCol AND current.$leftCol - node.$leftCol = 1")
-                    ->order('node.' . $this->_left . ' DESC');
-
-                break;
-            case self::LAST_CHILD :
-                $sql->where("current.$leftCol BETWEEN node.$leftCol+1 AND node.$rightCol AND node.$rightCol - current.$rightCol = 1")
-                    ->order('node.' . $this->_left . ' DESC');
-
-                break;
-            case self::NEXT_SIBLING :
-                $sql->where("current.$leftCol - node.$rightCol = 1");
-
-                break;
-            case self::PREV_SIBLING :
-                $sql->where("node.$leftCol - current.$rightCol = 1");
-
-                break;
-        }
-
-        $sql->where("current.$primary = ?", $nodeId, Zend_Db::INT_TYPE);
-
-        $result = $this->_db->fetchRow($sql);
-        if($result) {
-            return (int)$result[$this->_primary[1]];
         }
         else {
             return null;
@@ -890,48 +931,6 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         else {
             return parent::fetchRow($where, $order);
         }
-    }
-
-
-    /**
-     * Generates and returns SQL query that is used for fetchAll() and
-     * fetchRow() methods, in case $parentAlias param is supplied.
-     *
-     * @param string|array|Zend_Db_Table_Select|null $where       An SQL WHERE clause or Zend_Db_Table_Select object.
-     * @param string|null                            $parentAlias Additional column, named after value of this argument, will be returned, containing id of a parent node will be included in result set.
-     * @param string|array|null                      $order       An SQL ORDER clause.
-     * @param int|null                               $count       OPTIONAL An SQL LIMIT count.
-     * @param int|null                               $offset      OPTIONAL An SQL LIMIT offset.
-     * @return Zend_Db_Table_Select
-     */
-    protected function _getSelectWithParent($where, $parentAlias, $order, $count = null, $offset = null)
-    {
-        $parentAlias = (string)$parentAlias;
-
-        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
-
-        $parentSelect = $this->select()
-            ->from($this->_name, array($this->_primary[1]))
-            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol . ' BETWEEN ' . $leftCol . '+1 AND ' . $rightCol)
-            ->order($this->_left . ' DESC')
-            ->limit(1);
-
-        $select = $this->select()->from(array(self::LEFT_TBL_ALIAS => $this->_name), array('*', $parentAlias => "($parentSelect)"));
-
-        if($where !== null) {
-            $this->_where($select, $where);
-        }
-
-        if($order !== null) {
-            $this->_order($select, $order);
-        }
-
-        if($count !== null || $offset !== null) {
-            $select->limit($count, $offset);
-        }
-
-        return $select;
     }
 
 
