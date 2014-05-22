@@ -148,7 +148,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Check row exist
      *
-     * @param string row name
+     * @param string $row row name
      * @return string
      */
     private function _checkKey($row)
@@ -166,7 +166,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Checks whether valid node position is supplied.
      *
-     * @param string Position regarding on objective node.
+     * @param string $position Position regarding on objective node.
      * @return bool
      */
     private function _checkNodePosition($position)
@@ -183,9 +183,9 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      * Generates left and right column value, based on id of a
      * objective node.
      *
-     * @param int|null Id of a objective node.
-     * @param string Position in tree.
-     * @param int|null Id of a node for which left and right column values are being generated (optional).
+     * @param int|null $objectiveNodeId Id of a objective node.
+     * @param string $position Position in tree.
+     * @param int|null $id Id of a node for which left and right column values are being generated (optional).
      * @return array
      */
     protected function _getLftRgt($objectiveNodeId, $position, $id = null)
@@ -271,7 +271,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      * node that is changing position in tree, or being deleted,
      * has effect.
      *
-     * @param mixed Id of a node.
+     * @param mixed $id Id of a node.
      * @return void
      */
     protected function _reduceWidth($id)
@@ -301,8 +301,8 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Gets id of some node's current objective node.
      *
-     * @param mixed Node id.
-     * @param string Position in tree.
+     * @param mixed $nodeId Node id.
+     * @param string $position Position in tree.
      * @return int|null
      */
     protected function _getCurrentObjectiveId($nodeId, $position)
@@ -479,7 +479,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Gets whole tree, including depth information.
      *
-     * @param mixed An SQL WHERE clause or Zend_Db_Table_Select object.
+     * @param mixed $where An SQL WHERE clause or Zend_Db_Table_Select object.
      * @return array
      */
     public function getTree($where = null)
@@ -515,8 +515,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Gets parentsNode, including informations.
      *
-     * @param int Id of a node.
-     * @param bool Include current node.
+     * @param bool $withCurrent Include current node.
      * @return array
      */
     public function getParents($withCurrent = false)
@@ -686,9 +685,8 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Gets children nodes, including informations.
      *
-     * @param int nodeId of a node.
      * @param bool $withCurrent return current nodeId too.
-     * @param string order using order table key.
+     * @param string $order order using order table key.
      * @return array
      */
     public function getChildren($withCurrent = null, $order = null)
@@ -755,9 +753,9 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Overriding insert() method defined by Zend_Db_Table_Abstract.
      *
-     * @param array Submitted data.
-     * @param int|null Objective node id (optional).
-     * @param string Position regarding on objective node (optional).
+     * @param array $data Submitted data.
+     * @param int|null $objectiveNodeId Objective node id (optional).
+     * @param string $position Position regarding on objective node (optional). [firstChild | lastChild | nextSibling | prevSibling]
      * @return mixed
      */
     public function insert($data, $objectiveNodeId = null, $position = self::LAST_CHILD)
@@ -776,10 +774,10 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Updates info of some node.
      *
-     * @param array Submitted data.
-     * @param int Id of a node that is being updated.
-     * @param int Objective node id.
-     * @param string Position regarding on objective node.
+     * @param array $data Submitted data.
+     * @param int $id Id of a node that is being updated.
+     * @param int $objectiveNodeId Objective node id.
+     * @param string $position Position regarding on objective node (optional). [firstChild | lastChild | nextSibling | prevSibling]
      * @return mixed
      */
     public function updateNode($data, $id, $objectiveNodeId, $position = self::LAST_CHILD)
@@ -808,8 +806,8 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Deletes some node(s) and returns ids of deleted nodes.
      *
-     * @param mixed Id of a node.
-     * @param bool Whether to delete child nodes, too.
+     * @param mixed $id Id of a node.
+     * @param bool $cascade Whether to delete child nodes, too.
      * @return int The number of affected rows.
      */
     public function deleteNode($id, $cascade = false)
