@@ -88,6 +88,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     protected $_nestedDataCache = array();
 
+
     /**
      * __construct() - For concrete implementation of Nk_Db_Table_NestedSet
      *
@@ -106,6 +107,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return $this;
     }
 
+
     /**
      * Defined by Zend_Db_Table_Abstract.
      *
@@ -114,15 +116,16 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function setOptions(Array $options)
     {
-        if (isset($options[self::LEFT_COL])) {
+        if(isset($options[self::LEFT_COL])) {
             $this->_left = (string)$options[self::LEFT_COL];
         }
-        if (isset($options[self::RIGHT_COL])) {
+        if(isset($options[self::RIGHT_COL])) {
             $this->_right = (string)$options[self::RIGHT_COL];
         }
 
         return parent::setOptions($options);
     }
+
 
     /**
      * Defined by Zend_Db_Table_Abstract.
@@ -133,11 +136,12 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     {
         parent::_setupPrimaryKey();
 
-        if (count($this->_primary) > 1) { //Compound key?
+        if(count($this->_primary) > 1) { //Compound key?
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Tables with compound primary key are not currently supported.');
         }
     }
+
 
     /**
      * Validating supplied "left" and "right" columns.
@@ -146,18 +150,19 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     protected function _setupLftRgt()
     {
-        if (!$this->_left || !$this->_right) {
+        if(!$this->_left || !$this->_right) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Both "left" and "right" column names must be supplied.');
         }
 
         $this->_setupMetadata();
 
-        if (count(array_intersect(array($this->_left, $this->_right), array_keys($this->_metadata))) < 2) {
+        if(count(array_intersect(array($this->_left, $this->_right), array_keys($this->_metadata))) < 2) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Supplied "left" and "right" were not found.');
         }
     }
+
 
     /**
      * Check row exist
@@ -167,14 +172,15 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     private function _checkKey($row)
     {
-        if (!array_key_exists($row, $this->_metadata)) {
-//          include_once('Nk/Db/Table/NestedSet/Exception.php');
-//          throw new Nk_Db_Table_NestedSet_Exception('Supplied key "' . $row . '" was not found.');
-        return false;
+        if(!array_key_exists($row, $this->_metadata)) {
+            // include_once('Nk/Db/Table/NestedSet/Exception.php');
+            // throw new Nk_Db_Table_NestedSet_Exception('Supplied key "' . $row . '" was not found.');
+            return false;
         }
 
         return true;
     }
+
 
     /**
      * Retrieve the current node
@@ -191,11 +197,11 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             : $this->_primary[1];
 
         // querying table
-//      $rowset     = parent::fetchRow($rowName . ' = ' . $this->getAdapter()->quoteIdentifier($nodeId));
+        // $rowset     = parent::fetchRow($rowName . ' = ' . $this->getAdapter()->quoteIdentifier($nodeId));
         $rowset     = parent::fetchRow($rowName . ' = ' . $nodeId);
 
         // verifying row is correctly set, otherwise trown exectption
-        if (!$rowset || empty($rowset)) {
+        if(!$rowset || empty($rowset)) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Not defined node');
         }
@@ -204,6 +210,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         return $this;
     }
+
 
     /**
      * Return the current node Id
@@ -214,13 +221,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     {
         $nodeId = $this->_node[$this->_primary[1]];
 
-        if (!$nodeId) {
+        if(!$nodeId) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Not defined node');
         }
 
         return $nodeId;
     }
+
 
     /**
      * Return the current node
@@ -229,13 +237,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function getNode()
     {
-        if (!$this->_node || empty($this->_node)) {
+        if(!$this->_node || empty($this->_node)) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Not defined node');
         }
 
         return $this->_node;
     }
+
 
     /**
      * Gets whole tree, including depth information.
@@ -245,14 +254,17 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function getTree($where = null)
     {
-        $primary    = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $leftCol    = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol   = $this->getAdapter()->quoteIdentifier($this->_right);
+        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
         $select = $this->select()->setIntegrityCheck(false)
             ->from(
                 array(self::LEFT_TBL_ALIAS => $this->_name),
-                array(self::LEFT_TBL_ALIAS . '.*', 'depth' => new Zend_Db_Expr('COUNT(' . self::RIGHT_TBL_ALIAS . '.' . $primary . ') - 1'))
+                array(
+                      self::LEFT_TBL_ALIAS . '.*',
+                      // 'depth' => new Zend_Db_Expr('COUNT(' . self::RIGHT_TBL_ALIAS . '.' . $primary . ') - 1')
+                )
             )
             ->join(
                 array(self::RIGHT_TBL_ALIAS => $this->_name),
@@ -262,12 +274,13 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             ->group(self::LEFT_TBL_ALIAS . '.' . $this->_primary[1])
             ->order(self::LEFT_TBL_ALIAS . '.' . $this->_left);
 
-        if ($where !== null) {
+        if($where !== null) {
             $this->_where($select, $where);
         }
 
         return parent::fetchAll($select);
     }
+
 
     /**
      * Gets parentsNode, including informations.
@@ -300,10 +313,10 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
                ->where(self::LEFT_TBL_ALIAS . '.' . $this->_primary[1] . ' = ?', $nodeId)
                ->order(self::LEFT_TBL_ALIAS . '.' . $this->_left);
 
-//             echo $select;
 
         return parent::fetchAll($select)->toArray();
     }
+
 
     /**
      * Gets parent Node
@@ -312,11 +325,11 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function getParent()
     {
-        $nodeId      = $this->getNodeId();
+        $nodeId = $this->getNodeId();
 
-        $primary     = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $leftCol     = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol    = $this->getAdapter()->quoteIdentifier($this->_right);
+        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
         $select = $this->select()
             ->from(
@@ -325,8 +338,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
                )
                ->join(
                    array(self::RIGHT_TBL_ALIAS => $this->_name),
-                   self::RIGHT_TBL_ALIAS . '.' . $leftCol . ' < ' . self::LEFT_TBL_ALIAS . '.' . $leftCol
-                                                          . ' AND ' . self::RIGHT_TBL_ALIAS . '.' . $rightCol . ' > '. self::LEFT_TBL_ALIAS . '.' . $rightCol,
+                   self::RIGHT_TBL_ALIAS . '.' . $leftCol . ' < ' . self::LEFT_TBL_ALIAS . '.' . $leftCol . ' AND ' . self::RIGHT_TBL_ALIAS . '.' . $rightCol . ' > '. self::LEFT_TBL_ALIAS . '.' . $rightCol,
                    array()
                )
                ->where(self::LEFT_TBL_ALIAS . '.' . $this->_primary[1] . ' = ?', $nodeId)
@@ -336,18 +348,19 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return parent::fetchAll($select)->toArray();
     }
 
+
     /**
-     * Gets previous sibling node, including informations.
+     * Gets one previous sibling node, including informations.
      *
      * @return array
      */
     public function getPrevNode()
     {
-        $nodeId      = $this->getNodeId();
+        $nodeId = $this->getNodeId();
 
-        $primary     = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $leftCol     = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol    = $this->getAdapter()->quoteIdentifier($this->_right);
+        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
         $select = $this->select()
             ->from(
@@ -366,18 +379,19 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return parent::fetchAll($select)->toArray();
     }
 
+
     /**
-     * Gets previous sibling node, including informations.
+     * Gets one next sibling node, including informations.
      *
      * @return array
      */
     public function getNextNode()
     {
-        $nodeId      = $this->getNodeId();
+        $nodeId = $this->getNodeId();
 
-        $primary     = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $leftCol     = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol    = $this->getAdapter()->quoteIdentifier($this->_right);
+        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
         $select = $this->select()
             ->from(
@@ -396,6 +410,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return parent::fetchAll($select)->toArray();
     }
 
+
     /**
      * Gets brother nodes
      *
@@ -404,18 +419,17 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function getBrothers()
     {
-        $nodeId      = $this->getNodeId();
+        $nodeId = $this->getNodeId();
 
-        $primary     = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $leftCol     = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol    = $this->getAdapter()->quoteIdentifier($this->_right);
+        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
         $subQuery = $this->select()
             ->from(array(self::LEFT_TBL_ALIAS => $this->_name),
                    array(self::RIGHT_TBL_ALIAS . '.*'))
             ->join(array(self::RIGHT_TBL_ALIAS => $this->_name),
-                   self::RIGHT_TBL_ALIAS . '.' . $leftCol . ' < ' . self::LEFT_TBL_ALIAS . ' . ' . $leftCol . ' AND ' .
-                   self::RIGHT_TBL_ALIAS . '.' . $rightCol . ' > ' . self::LEFT_TBL_ALIAS . '.' . $rightCol,
+                   self::RIGHT_TBL_ALIAS . '.' . $leftCol . ' < ' . self::LEFT_TBL_ALIAS . ' . ' . $leftCol . ' AND ' . self::RIGHT_TBL_ALIAS . '.' . $rightCol . ' > ' . self::LEFT_TBL_ALIAS . '.' . $rightCol,
                    array())
             ->where(self::LEFT_TBL_ALIAS . '.' . $this->_primary[1] . ' = ?', $nodeId)
             ->group(self::RIGHT_TBL_ALIAS . '.' . $this->_primary[1])
@@ -430,16 +444,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
                )
                ->join(
                    array(self::RIGHT_TBL_ALIAS => $subQuery),
-                   self::LEFT_TBL_ALIAS . '.' . $leftCol . ' BETWEEN ' . self::RIGHT_TBL_ALIAS . '.' . $leftCol . ' AND ' .
-                   self::RIGHT_TBL_ALIAS . '.' . $rightCol,
+                   self::LEFT_TBL_ALIAS . '.' . $leftCol . ' BETWEEN ' . self::RIGHT_TBL_ALIAS . '.' . $leftCol . ' AND ' . self::RIGHT_TBL_ALIAS . '.' . $rightCol,
                    array()
                )
                ->having(self::LEFT_TBL_ALIAS . '.' . $this->_primary[1] != 'parentId');
 
-        print $select;
-
         return parent::fetchAll($select)->toArray();
     }
+
 
     /**
      * Gets parentNode, including informations.
@@ -480,34 +492,36 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return parent::fetchAll($select)->toArray();
     }
 
+
     /**
      * Return all childs id of current node
      * @return array
      */
     public function getChildsId()
     {
-        $nodeId         = $this->getNodeId();
-        $node           = $this->getNode();
+        $nodeId = $this->getNodeId();
+        $node = $this->getNode();
 
-        $primary        = $this->_primary[1];
-        $leftCol        = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol       = $this->getAdapter()->quoteIdentifier($this->_right);
+        $primary = $this->_primary[1];
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
-        echo $select = $this->select()
-        ->from(array(self::LEFT_TBL_ALIAS => $this->_name),
-        $primary
-        )
-        ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol  . " >= " . $node[$this->_left])
-        ->where(self::LEFT_TBL_ALIAS . '.' . $rightCol . " <= " . $node[$this->_right]);
+        $select = $this->select()
+            ->from(array(self::LEFT_TBL_ALIAS => $this->_name), $primary)
+            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol  . " >= " . $node[$this->_left])
+            ->where(self::LEFT_TBL_ALIAS . '.' . $rightCol . " <= " . $node[$this->_right]);
 
         $array = parent::fetchAll($select)->toArray();
 
         // applatit le tableau
         $ids = array();
-        foreach((array) $array as $key => $val) array_push($ids, $val[$primary]);
+        foreach((array) $array as $key => $val) {
+            array_push($ids, $val[$primary]);
+        }
 
         return $ids;
     }
+
 
     /**
      * Overriding insert() method defined by Zend_Db_Table_Abstract.
@@ -519,7 +533,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function insert($data, $objectiveNodeId = null, $position = self::LAST_CHILD)
     {
-        if (!$this->_checkNodePosition($position)) {
+        if(!$this->_checkNodePosition($position)) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Invalid node position is supplied.');
         }
@@ -528,6 +542,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         return parent::insert($data);
     }
+
 
     /**
      * Updates info of some node.
@@ -543,12 +558,12 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         $id = (int)$id;
         $objectiveNodeId = (int)$objectiveNodeId;
 
-        if (!$this->_checkNodePosition($position)) {
+        if(!$this->_checkNodePosition($position)) {
             include_once('Nk/Db/Table/NestedSet/Exception.php');
             throw new Nk_Db_Table_NestedSet_Exception('Invalid node position is supplied.');
         }
 
-        if ($objectiveNodeId != $this->_getCurrentObjectiveId($id, $position)) { //Objective node differs?
+        if($objectiveNodeId != $this->_getCurrentObjectiveId($id, $position)) { //Objective node differs?
             $this->_reduceWidth($id);
 
             $data = array_merge($data, $this->_getLftRgt($objectiveNodeId, $position, $id));
@@ -560,6 +575,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return $this->update($data, $where);
     }
 
+
     /**
      * Checks whether valid node position is supplied.
      *
@@ -568,12 +584,13 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     private function _checkNodePosition($position)
     {
-        if (!in_array($position, self::$_validPositions)) {
+        if(!in_array($position, self::$_validPositions)) {
             return false;
         }
 
         return true;
     }
+
 
     /**
      * Deletes some node(s) and returns ids of deleted nodes.
@@ -590,7 +607,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
 
-        if (!$cascade) {
+        if(!$cascade) {
             $this->_reduceWidth($id);
 
             //Deleting node.
@@ -617,6 +634,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         return $retval;
     }
 
+
     /**
      * Generates left and right column value, based on id of a
      * objective node.
@@ -636,16 +654,16 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         $left = null;
         $right = null;
 
-        if ($objectiveNodeId) { //User selected some objective node?
+        if($objectiveNodeId) { //User selected some objective node?
             $objectiveNodeId = (int)$objectiveNodeId;
             $result = $this->getNestedSetData($objectiveNodeId);
-            if ($result) {
+            if($result) {
                 $left = (int)$result['left'];
                 $right = (int)$result['right'];
             }
         }
 
-        if ($left !== null && $right !== null) { //Existing objective id?
+        if($left !== null && $right !== null) { //Existing objective id?
             switch ($position) {
                 case self::FIRST_CHILD :
                     $lftRgt[$this->_left] = $left + 1;
@@ -683,14 +701,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         }
         else {
             $sql = $this->select()->from($this->_name,array('max_rgt'=>new Zend_Db_Expr("MAX($rightCol)")));
-            if ($id !== null) {
+            if($id !== null) {
                $id = (int)$id;
                $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
                $sql->where("$primary != ?", $id, Zend_Db::INT_TYPE);
             }
             $result = $this->_db->fetchRow($sql);
 
-            if (!$result) { //No data? First node...
+            if(!$result) { //No data? First node...
                 $lftRgt[$this->_left] = 1;
             }
             else {
@@ -702,6 +720,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         return $lftRgt;
     }
+
 
     /**
      * Reduces lft and rgt values of some nodes, on which some
@@ -718,12 +737,12 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         $result = $this->getNestedSetData($id);
 
-        if ($result) {
+        if($result) {
             $left = (int)$result['left'];
             $right = (int)$result['right'];
             $width = (int)$result['width'];
 
-            if ($width > 2) { //Some node that has childs.
+            if($width > 2) { //Some node that has childs.
                 //Updating child nodes.
                 $this->update(array($this->_left=>new Zend_Db_Expr("$leftCol - 1"), $this->_right=>new Zend_Db_Expr("$rightCol - 1")), "$leftCol BETWEEN $left AND $right");
             }
@@ -734,6 +753,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         }
     }
 
+
     /**
      * Gets nested set data (left, right, width) for some node.
      *
@@ -742,7 +762,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function getNestedSetData($id)
     {
-        if (array_key_exists($id, $this->_nestedDataCache)) {
+        if(array_key_exists($id, $this->_nestedDataCache)) {
             return $this->_nestedDataCache[$id];
         }
 
@@ -762,7 +782,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             ->where($primary . ' = ?', (int)$id, Zend_Db::INT_TYPE);
 
         $result = $this->_db->fetchRow($sql);
-        if ($result) {
+        if($result) {
             $this->_nestedDataCache[$id] = $result; //Storing result in cache.
             return $result;
         }
@@ -770,6 +790,7 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             return null;
         }
     }
+
 
     /**
      * Gets id of some node's current objective node.
@@ -815,13 +836,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
         $sql->where("current.$primary = ?", $nodeId, Zend_Db::INT_TYPE);
 
         $result = $this->_db->fetchRow($sql);
-        if ($result) {
+        if($result) {
             return (int)$result[$this->_primary[1]];
         }
         else {
             return null;
         }
     }
+
 
     /**
      * Overriding fetchAll() method defined by Zend_Db_Table_Abstract.
@@ -838,16 +860,17 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function fetchAll($where = null, $getAsTree = false, $parentAlias = null, $order = null, $count = null, $offset = null)
     {
-        if ($getAsTree == true) { //If geeting nodes as tree, other arguments are omitted.
+        if($getAsTree == true) { //If geeting nodes as tree, other arguments are omitted.
             return $this->getTree($where);
         }
-        elseif ($parentAlias != null) {
+        elseif($parentAlias != null) {
             return parent::fetchAll($this->_getSelectWithParent($where, $parentAlias, $order, $count, $offset));
         }
         else {
             return parent::fetchAll($where, $order, $count, $offset);
         }
     }
+
 
     /**
      * Overriding fetchRow() method defined by Zend_Db_Table_Abstract.
@@ -861,13 +884,14 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      */
     public function fetchRow($where = null, $parentAlias = null, $order = null)
     {
-        if ($parentAlias != null) {
+        if($parentAlias != null) {
             return parent::fetchRow($this->_getSelectWithParent($where, $parentAlias, $order));
         }
         else {
             return parent::fetchRow($where, $order);
         }
     }
+
 
     /**
      * Generates and returns SQL query that is used for fetchAll() and
@@ -884,31 +908,32 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     {
         $parentAlias = (string)$parentAlias;
 
-        $leftCol     = $this->getAdapter()->quoteIdentifier($this->_left);
-        $rightCol    = $this->getAdapter()->quoteIdentifier($this->_right);
+        $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+        $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
 
         $parentSelect = $this->select()
             ->from($this->_name, array($this->_primary[1]))
             ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol . ' BETWEEN ' . $leftCol . '+1 AND ' . $rightCol)
-            ->order("$this->_left DESC")
+            ->order($this->_left . ' DESC')
             ->limit(1);
 
         $select = $this->select()->from(array(self::LEFT_TBL_ALIAS => $this->_name), array('*', $parentAlias => "($parentSelect)"));
 
-        if ($where !== null) {
+        if($where !== null) {
             $this->_where($select, $where);
         }
 
-        if ($order !== null) {
+        if($order !== null) {
             $this->_order($select, $order);
         }
 
-        if ($count !== null || $offset !== null) {
+        if($count !== null || $offset !== null) {
             $select->limit($count, $offset);
         }
 
         return $select;
     }
+
 
     /**
      * Defined by Zend_Db_Table_Abstract.
@@ -923,11 +948,11 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             self::RIGHT_COL =>  $this->_right
         );
 
-        if ($key === null) {
+        if($key === null) {
             return array_merge(parent::info(), $nestedSetInfo);
         }
         else {
-            if (array_key_exists($key, $nestedSetInfo)) {
+            if(array_key_exists($key, $nestedSetInfo)) {
                 return $nestedSetInfo[$key];
             }
             else {
