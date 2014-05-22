@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="https://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+    <![endif]-->
+    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                    <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-831811650"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-831811650" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/Nk_Db_Table_NestedSet_Exception.html">Nk_Db_Table_NestedSet_Exception</a></li>
+                                                    <li class="class"><a href="../classes/Nk_Db_Table_NestedTree.html">Nk_Db_Table_NestedTree</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/default.html">\</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\</small>Nk_Db_Table_NestedTree</h1>
+                    <p><em>Class that extends capabilities of Zend_Db_Table class,
+providing API for managing some Nested set table in
+database.</em></p>
+                    
+
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_setOptions" class="">setOptions()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_setNodeId" class="">setNodeId()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getNodeId" class="">getNodeId()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getNode" class="">getNode()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getTree" class="">getTree()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getParents" class="">getParents()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getParent" class="">getParent()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getPrevNode" class="">getPrevNode()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getNextNode" class="">getNextNode()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getBrothers" class="">getBrothers()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getChildren" class="">getChildren()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getChildrenId" class="">getChildrenId()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_insert" class="">insert()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_updateNode" class="">updateNode()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_deleteNode" class="">deleteNode()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_getNestedSetData" class="">getNestedSetData()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_fetchAll" class="">fetchAll()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_fetchRow" class="">fetchRow()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_info" class="">info()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_LEFT_COL" class="">LEFT_COL</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_RIGHT_COL" class="">RIGHT_COL</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_FIRST_CHILD" class="">FIRST_CHILD</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_LAST_CHILD" class="">LAST_CHILD</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_NEXT_SIBLING" class="">NEXT_SIBLING</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_PREV_SIBLING" class="">PREV_SIBLING</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_LEFT_TBL_ALIAS" class="">LEFT_TBL_ALIAS</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#constant_RIGHT_TBL_ALIAS" class="">RIGHT_TBL_ALIAS</a><br />
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__setupPrimaryKey" class="">_setupPrimaryKey()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__setupLftRgt" class="">_setupLftRgt()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__getLftRgt" class="">_getLftRgt()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__reduceWidth" class="">_reduceWidth()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__getCurrentObjectiveId" class="">_getCurrentObjectiveId()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__getSelectWithParent" class="">_getSelectWithParent()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__validPositions" class="">$_validPositions</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__left" class="">$_left</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__right" class="">$_right</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__level" class="">$_level</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__treeId" class="">$_treeId</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__currentNode" class="">$_currentNode</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__nestedDataCache" class="">$_nestedDataCache</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__checkKey" class="">_checkKey()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__checkNodePosition" class="">_checkNodePosition()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/NestedTree.php.html"><div class="path-wrapper">NestedTree.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper"></div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper">\Zend_Db_Table</div>
+                                                                                                    <div class="namespace-wrapper">\Nk_Db_Table_NestedTree</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr>
+                            <th>
+                                author
+                            </th>
+                            <td>
+                                                                    <p>jean-luc BARAT <a href="mailto:jl.barat@gmail.com">jl.barat@gmail.com</a></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                Based
+                            </th>
+                            <td>
+                                                                    <p>on <a href="http://devzone.zend.com/article/11886">http://devzone.zend.com/article/11886</a></p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                license
+                            </th>
+                            <td>
+                                                                    <p>Private License</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                Date
+                            </th>
+                            <td>
+                                                                    <p>12/08/2011</p>
+                                                            </td>
+                        </tr>
+                                            <tr>
+                            <th>
+                                todo
+                            </th>
+                            <td>
+                                                            </td>
+                        </tr>
+                                        </table>
+                </aside>
+            </div>
+
+                                    <a id="constants" name="constants"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Constants</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_LEFT_COL" name="constant_LEFT_COL" class="anchor"></a>
+            <article id="constant_LEFT_COL" class="constant">
+                <h3 class="">LEFT_COL</h3>
+                <pre class="signature">LEFT_COL</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_RIGHT_COL" name="constant_RIGHT_COL" class="anchor"></a>
+            <article id="constant_RIGHT_COL" class="constant">
+                <h3 class="">RIGHT_COL</h3>
+                <pre class="signature">RIGHT_COL</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_FIRST_CHILD" name="constant_FIRST_CHILD" class="anchor"></a>
+            <article id="constant_FIRST_CHILD" class="constant">
+                <h3 class="">FIRST_CHILD</h3>
+                <pre class="signature">FIRST_CHILD</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_LAST_CHILD" name="constant_LAST_CHILD" class="anchor"></a>
+            <article id="constant_LAST_CHILD" class="constant">
+                <h3 class="">LAST_CHILD</h3>
+                <pre class="signature">LAST_CHILD</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_NEXT_SIBLING" name="constant_NEXT_SIBLING" class="anchor"></a>
+            <article id="constant_NEXT_SIBLING" class="constant">
+                <h3 class="">NEXT_SIBLING</h3>
+                <pre class="signature">NEXT_SIBLING</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_PREV_SIBLING" name="constant_PREV_SIBLING" class="anchor"></a>
+            <article id="constant_PREV_SIBLING" class="constant">
+                <h3 class="">PREV_SIBLING</h3>
+                <pre class="signature">PREV_SIBLING</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_LEFT_TBL_ALIAS" name="constant_LEFT_TBL_ALIAS" class="anchor"></a>
+            <article id="constant_LEFT_TBL_ALIAS" class="constant">
+                <h3 class="">LEFT_TBL_ALIAS</h3>
+                <pre class="signature">LEFT_TBL_ALIAS</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="constant_RIGHT_TBL_ALIAS" name="constant_RIGHT_TBL_ALIAS" class="anchor"></a>
+            <article id="constant_RIGHT_TBL_ALIAS" class="constant">
+                <h3 class="">RIGHT_TBL_ALIAS</h3>
+                <pre class="signature">RIGHT_TBL_ALIAS</pre>
+                <p><em></em></p>
+                
+            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                            
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__validPositions" name="property__validPositions" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_validPositions</h3>
+                <pre class="signature">$_validPositions : array</pre>
+                <p><em>Valid objective node positions.</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__left" name="property__left" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_left</h3>
+                <pre class="signature">$_left : string</pre>
+                <p><em>Left column name in nested table.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__right" name="property__right" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_right</h3>
+                <pre class="signature">$_right : string</pre>
+                <p><em>Right column name in nested table.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__level" name="property__level" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_level</h3>
+                <pre class="signature">$_level : string</pre>
+                <p><em>Level in nested table.</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__treeId" name="property__treeId" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_treeId</h3>
+                <pre class="signature">$_treeId : int</pre>
+                <p><em>Current Id</em></p>
+                
+
+                                <h4>Type</h4>
+                int
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__currentNode" name="property__currentNode" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_currentNode</h3>
+                <pre class="signature">$_currentNode : array</pre>
+                <p><em>Current Node</em></p>
+                
+
+                                <h4>Type</h4>
+                array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__nestedDataCache" name="property__nestedDataCache" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_nestedDataCache</h3>
+                <pre class="signature">$_nestedDataCache</pre>
+                <p><em>Internal cache of nested data (left, right, width)
+retrieved from some nodes.</em></p>
+                
+
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() : void</pre>
+                <p><em>__construct() - For concrete implementation of Nk_Db_Table_NestedSet</em></p>
+                
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setOptions" name="method_setOptions" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setOptions()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setOptions(array <span class="argument">$options</span>) : \Zend_Db_Table_Abstract</pre>
+                <p><em>Defined by Zend_Db_Table_Abstract.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$options </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Zend_Db_Table_Abstract
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setNodeId" name="method_setNodeId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setNodeId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setNodeId(int|string <span class="argument">$nodeId</span>, string <span class="argument">$rowName</span>) : object</pre>
+                <p><em>Retrieve the current node</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int|string</td>
+                                <td>$nodeId </td>
+                                <td><p>identifier of node to retrieve</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$rowName </td>
+                                <td><p>row name where search</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    object
+                                            &mdash; <p>$this</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getNodeId" name="method_getNodeId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getNodeId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getNodeId() : int</pre>
+                <p><em>Return the current node Id</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    int
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getNode" name="method_getNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getNode() : array</pre>
+                <p><em>Return the current node</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getTree" name="method_getTree" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getTree()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getTree(mixed <span class="argument">$where</span>) : array</pre>
+                <p><em>Gets whole tree, including depth information.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$where </td>
+                                <td><p>An SQL WHERE clause or Zend_Db_Table_Select object.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getParents" name="method_getParents" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getParents()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getParents(bool <span class="argument">$withCurrent</span>) : array</pre>
+                <p><em>Gets parentsNode, including informations.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>bool</td>
+                                <td>$withCurrent </td>
+                                <td><p>Include current node.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getParent" name="method_getParent" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getParent()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getParent() : array</pre>
+                <p><em>Gets parent Node</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getPrevNode" name="method_getPrevNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getPrevNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPrevNode() : array</pre>
+                <p><em>Gets one previous sibling node, including informations.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getNextNode" name="method_getNextNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getNextNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getNextNode() : array</pre>
+                <p><em>Gets one next sibling node, including informations.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getBrothers" name="method_getBrothers" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getBrothers()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getBrothers() : array</pre>
+                <p><em>Gets brother nodes</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getChildren" name="method_getChildren" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getChildren()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getChildren(bool <span class="argument">$withCurrent</span>, string <span class="argument">$order</span>) : array</pre>
+                <p><em>Gets children nodes, including informations.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>bool</td>
+                                <td>$withCurrent </td>
+                                <td><p>return current nodeId too.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$order </td>
+                                <td><p>order using order table key.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getChildrenId" name="method_getChildrenId" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getChildrenId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getChildrenId() : array</pre>
+                <p><em>Return all children ids of current node (all level)</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_insert" name="method_insert" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">insert()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">insert(array <span class="argument">$data</span>, int|null <span class="argument">$objectiveNodeId</span>, string <span class="argument">$position</span>) : mixed</pre>
+                <p><em>Overriding insert() method defined by Zend_Db_Table_Abstract.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>Submitted data.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int|null</td>
+                                <td>$objectiveNodeId </td>
+                                <td><p>Objective node id (optional).</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$position </td>
+                                <td><p>Position regarding on objective node (optional). [firstChild | lastChild | nextSibling | prevSibling]</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_updateNode" name="method_updateNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">updateNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">updateNode(array <span class="argument">$data</span>, int <span class="argument">$id</span>, int <span class="argument">$objectiveNodeId</span>, string <span class="argument">$position</span>) : mixed</pre>
+                <p><em>Updates info of some node.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>Submitted data.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int</td>
+                                <td>$id </td>
+                                <td><p>Id of a node that is being updated.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int</td>
+                                <td>$objectiveNodeId </td>
+                                <td><p>Objective node id.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$position </td>
+                                <td><p>Position regarding on objective node (optional). [firstChild | lastChild | nextSibling | prevSibling]</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_deleteNode" name="method_deleteNode" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">deleteNode()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">deleteNode(mixed <span class="argument">$id</span>, bool <span class="argument">$cascade</span>) : int</pre>
+                <p><em>Deletes some node(s) and returns ids of deleted nodes.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$id </td>
+                                <td><p>Id of a node.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>bool</td>
+                                <td>$cascade </td>
+                                <td><p>Whether to delete child nodes, too.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    int
+                                            &mdash; <p>The number of affected rows.</p>
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getNestedSetData" name="method_getNestedSetData" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getNestedSetData()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getNestedSetData(int <span class="argument">$id</span>) : array|null</pre>
+                <p><em>Gets nested set data (left, right, width) for some node.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int</td>
+                                <td>$id </td>
+                                <td><p>Id of a node.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array|null
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fetchAll" name="method_fetchAll" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fetchAll()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fetchAll(string|array|\Zend_Db_Table_Select <span class="argument">$where</span>, bool <span class="argument">$getAsTree</span>, string <span class="argument">$parentAlias</span>, string|array <span class="argument">$order</span>, int <span class="argument">$count</span>, int <span class="argument">$offset</span>) : \Zend_Db_Table_Rowset_Abstract</pre>
+                <p><em>Overriding fetchAll() method defined by Zend_Db_Table_Abstract.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|array|\Zend_Db_Table_Select</td>
+                                <td>$where </td>
+                                <td><p>OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>bool</td>
+                                <td>$getAsTree </td>
+                                <td><p>OPTIONAL Whether to retrieve nodes as tree.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$parentAlias </td>
+                                <td><p>OPTIONAL If this argument is supplied, additional column,</p>
+<pre><code>                                                 named after value of this argument, will be returned,
+                                                 containing id of a parent node will be included in result set.</code></pre></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|array</td>
+                                <td>$order </td>
+                                <td><p>OPTIONAL An SQL ORDER clause.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int</td>
+                                <td>$count </td>
+                                <td><p>OPTIONAL An SQL LIMIT count.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int</td>
+                                <td>$offset </td>
+                                <td><p>OPTIONAL An SQL LIMIT offset.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Zend_Db_Table_Rowset_Abstract
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_fetchRow" name="method_fetchRow" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">fetchRow()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">fetchRow(string|array|\Zend_Db_Table_Select <span class="argument">$where</span>, string <span class="argument">$parentAlias</span>, string|array <span class="argument">$order</span>) : \Zend_Db_Table_Row_Abstract|null</pre>
+                <p><em>Overriding fetchRow() method defined by Zend_Db_Table_Abstract.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|array|\Zend_Db_Table_Select</td>
+                                <td>$where </td>
+                                <td><p>OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$parentAlias </td>
+                                <td><p>OPTIONAL If this argument is supplied, additional column,</p>
+<pre><code>                                                 named after value of this argument, will be returned,
+                                                 containing id of a parent node will be included in result set.</code></pre></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|array</td>
+                                <td>$order </td>
+                                <td><p>OPTIONAL An SQL ORDER clause.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Zend_Db_Table_Row_Abstract|null
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_info" name="method_info" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">info()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">info(string <span class="argument">$key</span>) : mixed</pre>
+                <p><em>Defined by Zend_Db_Table_Abstract.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$key </td>
+                                <td><p>The specific info part to return OPTIONAL</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    mixed
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__setupPrimaryKey" name="method__setupPrimaryKey" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_setupPrimaryKey()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_setupPrimaryKey() : void</pre>
+                <p><em>Defined by Zend_Db_Table_Abstract.</em></p>
+                
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__setupLftRgt" name="method__setupLftRgt" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_setupLftRgt()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_setupLftRgt() : void</pre>
+                <p><em>Validating supplied &quot;left&quot; and &quot;right&quot; columns.</em></p>
+                
+
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__getLftRgt" name="method__getLftRgt" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_getLftRgt()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_getLftRgt(int|null <span class="argument">$objectiveNodeId</span>, string <span class="argument">$position</span>, int|null <span class="argument">$id</span>) : array</pre>
+                <p><em>Generates left and right column value, based on id of a
+objective node.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int|null</td>
+                                <td>$objectiveNodeId </td>
+                                <td><p>Id of a objective node.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$position </td>
+                                <td><p>Position in tree.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int|null</td>
+                                <td>$id </td>
+                                <td><p>Id of a node for which left and right column values are being generated (optional).</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__reduceWidth" name="method__reduceWidth" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_reduceWidth()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_reduceWidth(mixed <span class="argument">$id</span>) : void</pre>
+                <p><em>Reduces lft and rgt values of some nodes, on which some
+node that is changing position in tree, or being deleted,
+has effect.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$id </td>
+                                <td><p>Id of a node.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__getCurrentObjectiveId" name="method__getCurrentObjectiveId" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_getCurrentObjectiveId()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_getCurrentObjectiveId(mixed <span class="argument">$nodeId</span>, string <span class="argument">$position</span>) : int|null</pre>
+                <p><em>Gets id of some node&#039;s current objective node.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>mixed</td>
+                                <td>$nodeId </td>
+                                <td><p>Node id.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$position </td>
+                                <td><p>Position in tree.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    int|null
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__getSelectWithParent" name="method__getSelectWithParent" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_getSelectWithParent()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_getSelectWithParent(string|array|\Zend_Db_Table_Select|null <span class="argument">$where</span>, string|null <span class="argument">$parentAlias</span>, string|array|null <span class="argument">$order</span>, int|null <span class="argument">$count</span>, int|null <span class="argument">$offset</span>) : \Zend_Db_Table_Select</pre>
+                <p><em>Generates and returns SQL query that is used for fetchAll() and
+fetchRow() methods, in case $parentAlias param is supplied.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string|array|\Zend_Db_Table_Select|null</td>
+                                <td>$where </td>
+                                <td><p>An SQL WHERE clause or Zend_Db_Table_Select object.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|null</td>
+                                <td>$parentAlias </td>
+                                <td><p>Additional column, named after value of this argument, will be returned, containing id of a parent node will be included in result set.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string|array|null</td>
+                                <td>$order </td>
+                                <td><p>An SQL ORDER clause.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int|null</td>
+                                <td>$count </td>
+                                <td><p>OPTIONAL An SQL LIMIT count.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>int|null</td>
+                                <td>$offset </td>
+                                <td><p>OPTIONAL An SQL LIMIT offset.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    \Zend_Db_Table_Select
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__checkKey" name="method__checkKey" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_checkKey()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_checkKey(string <span class="argument">$row</span>) : string</pre>
+                <p><em>Check row exist</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$row </td>
+                                <td><p>row name</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__checkNodePosition" name="method__checkNodePosition" class="anchor"></a>
+            <article class="method">
+                <h3 class="private ">_checkNodePosition()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_checkNodePosition(string <span class="argument">$position</span>) : bool</pre>
+                <p><em>Checks whether valid node position is supplied.</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>string</td>
+                                <td>$position </td>
+                                <td><p>Position regarding on objective node.</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    bool
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">NestedTree.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/NestedTree.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on May 22nd, 2014 at 15:18.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>
