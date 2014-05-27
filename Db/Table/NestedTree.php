@@ -780,9 +780,20 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             throw new Nk_Db_Table_NestedSet_Exception('Invalid node position is supplied.');
         }
 
-        $data = array_merge($data, $this->_getLftRgt($objectiveNodeId, $position));
+        $this->_db->beginTransaction();
 
-        return parent::insert($data);
+        try {
+            $data = array_merge($data, $this->_getLftRgt($objectiveNodeId, $position));
+
+            $result = parent::insert($data);
+            $this->_db->commit();
+        }
+        catch(Exception $e) {
+            $this->_db->rollBack();
+            echo $e->getMessage();
+        }
+
+        return $result;
     }
 
 
@@ -805,16 +816,28 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
             throw new Nk_Db_Table_NestedSet_Exception('Invalid node position is supplied.');
         }
 
-        if($objectiveNodeId != $this->_getCurrentObjectiveId($id, $position)) { //Objective node differs?
-            $this->_reduceWidth($id);
+        $this->_db->beginTransaction();
 
-            $data = array_merge($data, $this->_getLftRgt($objectiveNodeId, $position, $id));
+        try {
+            if($objectiveNodeId != $this->_getCurrentObjectiveId($id, $position)) { //Objective node differs?
+                $this->_reduceWidth($id);
+
+                $data = array_merge($data, $this->_getLftRgt($objectiveNodeId, $position, $id));
+            }
+
+            $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+            $where = $this->getAdapter()->quoteInto($primary . ' = ?', $id, Zend_Db::INT_TYPE);
+
+            $result = $this->update($data, $where);
+
+            $this->_db->commit();
+        }
+        catch(Exception $e) {
+            $this->_db->rollBack();
+            echo $e->getMessage();
         }
 
-        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
-        $where = $this->getAdapter()->quoteInto($primary . ' = ?', $id, Zend_Db::INT_TYPE);
-
-        return $this->update($data, $where);
+        return $result;
     }
 
 
@@ -831,30 +854,40 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         $id = (int)$id;
 
-        $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
+        $this->_db->beginTransaction();
 
-        if(!$cascade) {
-            $this->_reduceWidth($id);
+        try {
+            $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
 
-            //Deleting node.
-            $retval = $this->delete(array($primary . ' = ?'=>$id));
+            if(!$cascade) {
+                $this->_reduceWidth($id);
+
+                //Deleting node.
+                $retval = $this->delete(array($primary . ' = ?'=>$id));
+            }
+            else {
+                $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
+                $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
+
+                $result = $this->getNestedSetData($id);
+
+                $lft = (int)$result['left'];
+                $rgt = (int)$result['right'];
+                $width = (int)$result['width'];
+
+                //Deleting items.
+                $retval = $this->delete("$leftCol BETWEEN $lft AND $rgt");
+
+                $this->update(array($this->_left => new Zend_Db_Expr("$leftCol - $width")), "$leftCol > $lft");
+
+                $this->update(array($this->_right => new Zend_Db_Expr("$rightCol - $width")), "$rightCol > $rgt");
+            }
+
+            $this->_db->commit();
         }
-        else {
-            $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
-            $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
-
-            $result = $this->getNestedSetData($id);
-
-            $lft = (int)$result['left'];
-            $rgt = (int)$result['right'];
-            $width = (int)$result['width'];
-
-            //Deleting items.
-            $retval = $this->delete("$leftCol BETWEEN $lft AND $rgt");
-
-            $this->update(array($this->_left => new Zend_Db_Expr("$leftCol - $width")), "$leftCol > $lft");
-
-            $this->update(array($this->_right => new Zend_Db_Expr("$rightCol - $width")), "$rightCol > $rgt");
+        catch(Exception $e) {
+            $this->_db->rollBack();
+            echo $e->getMessage();
         }
 
         return $retval;
