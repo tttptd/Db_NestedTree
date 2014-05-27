@@ -67,6 +67,13 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     protected $_level;
 
     /**
+     * Node path_name
+     *
+     * @var string
+     */
+    protected $_path_name;
+
+    /**
      * Current Id
      *
      * @var int
@@ -79,6 +86,13 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
      * @var array
      */
     protected $_currentNode = null;
+
+    /**
+     * Enum path to item
+     *
+     * @var string
+     */
+    protected $_enum_path;
 
     /**
      * Internal cache of nested data (left, right, width)
@@ -540,8 +554,9 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
                    array()
                )
                ->where(self::LEFT_TBL_ALIAS . '.' . $this->_primary[1] . ' = ?', $nodeId)
-               ->order(self::LEFT_TBL_ALIAS . '.' . $this->_left);
+               ->order(self::RIGHT_TBL_ALIAS . '.' . $this->_left);
 
+        // print $select . '<br>';
 
         return parent::fetchAll($select)->toArray();
     }
@@ -956,6 +971,52 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
                 return parent::info($key);
             }
         }
+    }
+
+
+    /**
+     * Enum path to node from root. No opening and closing slashes.
+     * Repeated call gets value from cache
+     *
+     * @param  boolean $rescan force rescan path from db
+     *
+     * @return string
+     */
+    public function enumPath($rescan = false)
+    {
+        if(empty($this->_enum_path) || $rescan) {
+            $this->_enum_path = $this->_enumPath();
+        }
+
+        return $this->_enum_path;
+    }
+
+
+
+    /**
+     * Enum path to node from root. No opening and closing slashes.
+     *
+     * @return string
+     */
+    protected function _enumPath()
+    {
+        $path = array();
+
+        $parents = $this->getParents(true);
+        if(!empty($parents)) {
+            foreach($parents as $k => $parent) {
+                if($k === 0 && empty($parent[$this->_path_name])) {
+
+                }
+                else {
+                    $path[] = $parent[$this->_path_name];
+                }
+            }
+        }
+
+        $path = implode('/', $path);
+
+        return $path;
     }
 
 }
