@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-831811650"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1542066610"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-831811650" class="accordion-body collapse in">
+            <div id="namespace-1542066610" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -204,6 +204,7 @@ database.</em></p>
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#method_fetchAll" class="">fetchAll()</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#method_fetchRow" class="">fetchRow()</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#method_info" class="">info()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method_enumPath" class="">enumPath()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <em>No public properties found</em>
@@ -227,14 +228,17 @@ database.</em></p>
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#method__reduceWidth" class="">_reduceWidth()</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#method__getCurrentObjectiveId" class="">_getCurrentObjectiveId()</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#method__getSelectWithParent" class="">_getSelectWithParent()</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#method__enumPath" class="">_enumPath()</a><br />
                                                             </section>
                             <section class="span4">
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__validPositions" class="">$_validPositions</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__left" class="">$_left</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__right" class="">$_right</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__level" class="">$_level</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__path_name" class="">$_path_name</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__treeId" class="">$_treeId</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__currentNode" class="">$_currentNode</a><br />
+                                                                    <a href="../classes/Nk_Db_Table_NestedTree.html#property__enum_path" class="">$_enum_path</a><br />
                                                                     <a href="../classes/Nk_Db_Table_NestedTree.html#property__nestedDataCache" class="">$_nestedDataCache</a><br />
                                                             </section>
                             <section class="span4">
@@ -675,6 +679,36 @@ database.</em></p>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
+            <a id="property__path_name" name="property__path_name" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_path_name</h3>
+                <pre class="signature">$_path_name : string</pre>
+                <p><em>Node path_name</em></p>
+                
+
+                                <h4>Type</h4>
+                string
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
             <a id="property__treeId" name="property__treeId" class="anchor"></a>
             <article class="property">
                 <h3 class="protected ">$_treeId</h3>
@@ -714,6 +748,36 @@ database.</em></p>
 
                                 <h4>Type</h4>
                 array
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property__enum_path" name="property__enum_path" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$_enum_path</h3>
+                <pre class="signature">$_enum_path : string</pre>
+                <p><em>Enum path to item</em></p>
+                
+
+                                <h4>Type</h4>
+                string
                                             </article>
         </div>
         <aside class="span4 detailsbar">
@@ -1604,6 +1668,47 @@ retrieved from some nodes.</em></p>
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_enumPath" name="method_enumPath" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">enumPath()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">enumPath(boolean <span class="argument">$rescan</span>) : string</pre>
+                <p><em>Enum path to node from root. No opening and closing slashes.</em></p>
+                <p>Repeated call gets value from cache</p>
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>boolean</td>
+                                <td>$rescan </td>
+                                <td><p>force rescan path from db</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
                                                     <div class="row-fluid">
         <div class="span8 content class">
             <a id="method__setupPrimaryKey" name="method__setupPrimaryKey" class="anchor"></a>
@@ -1867,6 +1972,39 @@ fetchRow() methods, in case $parentAlias param is supplied.</em></p>
         </aside>
     </div>
 
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method__enumPath" name="method__enumPath" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">_enumPath()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">_enumPath() : string</pre>
+                <p><em>Enum path to node from root. No opening and closing slashes.</em></p>
+                
+
+                
+                
+                                    <h4>Returns</h4>
+                    string
+                                                </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr>
+                        <th>
+                            todo
+                        </th>
+                        <td>
+                                                    </td>
+                    </tr>
+                            </table>
+        </aside>
+    </div>
+
                                                     <div class="row-fluid">
         <div class="span8 content class">
             <a id="method__checkKey" name="method__checkKey" class="anchor"></a>
@@ -1998,7 +2136,7 @@ fetchRow() methods, in case $parentAlias param is supplied.</em></p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on May 22nd, 2014 at 15:18.
+                    on May 27th, 2014 at 16:12.
                 </section>
             </section>
         </section>
