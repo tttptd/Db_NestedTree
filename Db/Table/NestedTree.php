@@ -700,15 +700,18 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
     /**
      * Gets children nodes, including informations.
      *
-     * @param bool $withCurrent return current nodeId too.
-     * @param string $order order using order table key.
+     * @param int $depth (optional) глубина выборки детей. Null - все уровни, 0 - текущий, +$depth level
+     * @param bool $withCurrent (optional) return current nodeId too. Ставится в true при $depth = 0
+     * @param string $order (optional) order using order table key.
      * @return array
      */
-    public function getChildren($withCurrent = null, $order = null)
+    public function getChildren($depth = null, $withCurrent = null, $order = null)
     {
-        $withCurrent = (int) $withCurrent;
         $nodeId = $this->getNodeId();
         $order = (string) $order;
+        if($depth === 0) {
+            $withCurrent = true;
+        }
 
         $primary = $this->getAdapter()->quoteIdentifier($this->_primary[1]);
         $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
@@ -717,18 +720,26 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
         $select = $this->select()
             ->from(array(self::LEFT_TBL_ALIAS => $this->_name))
-            ->from(array(self::RIGHT_TBL_ALIAS => $this->_name), array())
-            ->where(self::LEFT_TBL_ALIAS . '.' . $levelCol . ' = ' . self::RIGHT_TBL_ALIAS . '.' . $levelCol . ' + 1')
-            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol  . " - $withCurrent > " . self::RIGHT_TBL_ALIAS . '.' . $leftCol)
-            ->where(self::LEFT_TBL_ALIAS . '.' . $rightCol . " + $withCurrent < " . self::RIGHT_TBL_ALIAS . '.' . $rightCol)
+            ->from(array(self::RIGHT_TBL_ALIAS => $this->_name), array());
+
+        if(!is_null($depth)) {
+            $select
+                ->where(self::LEFT_TBL_ALIAS . '.' . $levelCol . ' <= ' . self::RIGHT_TBL_ALIAS . '.' . $levelCol . ' + ' . $depth);
+        }
+
+        $select
+            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol  . ($withCurrent ? " >= " : " > ") . self::RIGHT_TBL_ALIAS . '.' . $leftCol)
+            ->where(self::LEFT_TBL_ALIAS . '.' . $rightCol . ($withCurrent ? " <= " : " < ") . self::RIGHT_TBL_ALIAS . '.' . $rightCol)
             ->where(self::RIGHT_TBL_ALIAS . '.' . $this->_primary[1] . ' = ?', $nodeId);
 
         // If order not null, define order
-        if(!is_null($order) &&  $this->_checkKey($order)) {
-            $order = ($order !== null && $this->_checkKey($order))
-                        ? $order
-                        : $this->_left;
+        if(!is_null($order) && $this->_checkKey($order)) {
             $select->order($order);
+        }
+        else {
+            $select
+                ->order($this->_left);
+                // ->order($this->_level);
         }
 
         return parent::fetchAll($select)->toArray();
@@ -737,21 +748,48 @@ class Nk_Db_Table_NestedTree extends Zend_Db_Table //_Abstract
 
     /**
      * Return all children ids of current node (all level)
+     *
+     * @param int $depth (optional) глубина выборки детей. Null - все уровни, 0 - текущий, +$depth level
+     * @param bool $withCurrent (optional) return current nodeId too.
+     * @param string $order (optional) order using order table key.
      * @return array
      */
-    public function getChildrenId()
+    public function getChildrenId($depth = null, $withCurrent = null, $order = null)
     {
         $nodeId = $this->getNodeId();
         $node = $this->getNode();
+        $order = (string) $order;
+        if($depth === 0) {
+            $withCurrent = true;
+        }
 
         $primary = $this->_primary[1];
         $leftCol = $this->getAdapter()->quoteIdentifier($this->_left);
         $rightCol = $this->getAdapter()->quoteIdentifier($this->_right);
+        $levelCol = $this->getAdapter()->quoteIdentifier($this->_level);
 
         $select = $this->select()
             ->from(array(self::LEFT_TBL_ALIAS => $this->_name), $primary)
-            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol  . " >= " . $node[$this->_left])
-            ->where(self::LEFT_TBL_ALIAS . '.' . $rightCol . " <= " . $node[$this->_right]);
+            ->where(self::LEFT_TBL_ALIAS . '.' . $leftCol  . ($withCurrent ? " >= " : " > ") . $node[$this->_left])
+            ->where(self::LEFT_TBL_ALIAS . '.' . $rightCol . ($withCurrent ? " <= " : " < ") . $node[$this->_right]);
+
+        if(!is_null($depth)) {
+            $select
+                ->where(self::LEFT_TBL_ALIAS . '.' . $levelCol . ' <= ' . $node[$this->_level] . ' + ' . $depth);
+        }
+
+
+        // If order not null, define order
+        if(!is_null($order) && $this->_checkKey($order)) {
+            $select->order($order);
+        }
+        else {
+            $select
+                ->order($this->_left);
+                // ->order($this->_level);
+        }
+
+        // print $select . '<br>';
 
         $array = parent::fetchAll($select)->toArray();
 
