@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1542066610"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-102576394"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1542066610" class="accordion-body collapse in">
+            <div id="namespace-102576394" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -1238,21 +1238,26 @@ retrieved from some nodes.</em></p>
             <article class="method">
                 <h3 class="public ">getChildren()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getChildren(bool <span class="argument">$withCurrent</span>, string <span class="argument">$order</span>) : array</pre>
+                <pre class="signature" style="margin-right: 54px;">getChildren(int <span class="argument">$depth</span>, bool <span class="argument">$withCurrent</span>, string <span class="argument">$order</span>) : array</pre>
                 <p><em>Gets children nodes, including informations.</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
+                                <td>int</td>
+                                <td>$depth </td>
+                                <td><p>(optional) глубина выборки детей. Null - все уровни, 0 - текущий, +$depth level</p></td>
+                            </tr>
+                                                    <tr>
                                 <td>bool</td>
                                 <td>$withCurrent </td>
-                                <td><p>return current nodeId too.</p></td>
+                                <td><p>(optional) return current nodeId too. Ставится в true при $depth = 0</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
                                 <td>$order </td>
-                                <td><p>order using order table key.</p></td>
+                                <td><p>(optional) order using order table key.</p></td>
                             </tr>
                                             </table>
                 
@@ -1284,10 +1289,28 @@ retrieved from some nodes.</em></p>
             <article class="method">
                 <h3 class="public ">getChildrenId()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getChildrenId() : array</pre>
+                <pre class="signature" style="margin-right: 54px;">getChildrenId(int <span class="argument">$depth</span>, bool <span class="argument">$withCurrent</span>, string <span class="argument">$order</span>) : array</pre>
                 <p><em>Return all children ids of current node (all level)</em></p>
                 
 
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>int</td>
+                                <td>$depth </td>
+                                <td><p>(optional) глубина выборки детей. Null - все уровни, 0 - текущий, +$depth level</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>bool</td>
+                                <td>$withCurrent </td>
+                                <td><p>(optional) return current nodeId too.</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>string</td>
+                                <td>$order </td>
+                                <td><p>(optional) order using order table key.</p></td>
+                            </tr>
+                                            </table>
                 
                 
                                     <h4>Returns</h4>
@@ -2136,7 +2159,7 @@ fetchRow() methods, in case $parentAlias param is supplied.</em></p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on May 27th, 2014 at 16:12.
+                    on September 5th, 2014 at 21:05.
                 </section>
             </section>
         </section>
